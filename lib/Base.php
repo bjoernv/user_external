@@ -50,7 +50,7 @@ abstract class Base extends \OC\User\Backend {
 		$query->delete('users_external')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)))
 			->andWhere($query->expr()->eq('backend', $query->createNamedParameter($this->backend)));
-		$query->execute();
+		$query->executeStatement();
 		return true;
 	}
 
@@ -67,7 +67,7 @@ abstract class Base extends \OC\User\Backend {
 			->from('users_external')
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)))
 			->andWhere($query->expr()->eq('backend', $query->createNamedParameter($this->backend)));
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$user = $result->fetch();
 		$result->closeCursor();
 
@@ -98,7 +98,7 @@ abstract class Base extends \OC\User\Backend {
 		if ($offset) {
 			$query->setFirstResult($offset);
 		}
-		$result = $query->execute();
+		$result = $query->executeQuery();
 
 		$displayNames = [];
 		while ($row = $result->fetch()) {
@@ -127,7 +127,7 @@ abstract class Base extends \OC\User\Backend {
 		if ($offset) {
 			$query->setFirstResult($offset);
 		}
-		$result = $query->execute();
+		$result = $query->executeQuery();
 
 		$users = [];
 		while ($row = $result->fetch()) {
@@ -165,7 +165,7 @@ abstract class Base extends \OC\User\Backend {
 			->set('displayname', $query->createNamedParameter($displayName))
 			->where($query->expr()->eq('uid', $query->createNamedParameter($uid)))
 			->andWhere($query->expr()->eq('backend', $query->createNamedParameter($this->backend)));
-		$query->execute();
+		$query->executeStatement();
 
 		return true;
 	}
@@ -186,7 +186,7 @@ abstract class Base extends \OC\User\Backend {
 					'uid' => $query->createNamedParameter($uid),
 					'backend' => $query->createNamedParameter($this->backend),
 				]);
-			$query->execute();
+			$query->executeStatement();
 
 			if ($groups) {
 				$createduser = \OC::$server->getUserManager()->get($uid);
@@ -215,7 +215,7 @@ abstract class Base extends \OC\User\Backend {
 			->from('users_external')
 			->where($query->expr()->iLike('uid', $query->createNamedParameter($connection->escapeLikeParameter($uid))))
 			->andWhere($query->expr()->eq('backend', $query->createNamedParameter($this->backend)));
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$users = $result->fetchColumn();
 		$result->closeCursor();
 
@@ -233,7 +233,7 @@ abstract class Base extends \OC\User\Backend {
 		$query->select($query->func()->count('*', 'num_users'))
 			->from('users_external')
 			->where($query->expr()->eq('backend', $query->createNamedParameter($this->backend)));
-		$result = $query->execute();
+		$result = $query->executeQuery();
 		$users = $result->fetchColumn();
 		$result->closeCursor();
 
